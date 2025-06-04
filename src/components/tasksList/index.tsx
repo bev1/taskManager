@@ -4,12 +4,19 @@ import Typography from "@mui/material/Typography";
 import { type Task, TaskPriority, TaskStatus } from "../../types/general.types.ts";
 import TaskPopup from "../taskPopup";
 import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
 import { Dropdown } from "../formControls/dropdown";
 import { CheckboxControl } from "../formControls/checkbox";
 import { getFilteredAndSortedTasks } from "./helpers.ts";
 import Divider from "@mui/material/Divider";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { removeTaskFromProject } from "../../store/projectSlice.ts";
+import type { AppDispatch } from "../../store";
 
 export const TasksList: FC<{ tasks: Task[] }> = ({ tasks }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { projectId } = useParams<{ projectId: string }>();
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
   const [sortBy, setSortBy] = useState<"priority" | "status" | undefined>();
@@ -38,6 +45,10 @@ export const TasksList: FC<{ tasks: Task[] }> = ({ tasks }) => {
     setSelectedStatuses((prev) =>
       prev.includes(status) ? prev.filter((s) => s !== status) : [...prev, status],
     );
+  };
+
+  const handleDeleteTask = (task: Task) => {
+    dispatch(removeTaskFromProject({ projectId, taskId: task.id }));
   };
 
   const filteredAndSortedTasks = getFilteredAndSortedTasks(tasks, {
@@ -97,15 +108,33 @@ export const TasksList: FC<{ tasks: Task[] }> = ({ tasks }) => {
               mb={1}
               p={2}
               sx={{
-                cursor: "pointer",
-                "&:hover": { backgroundColor: "grey" },
+                display: "flex",
+                justifyContent: "space-between",
               }}
-              onClick={() => handleTaskClick(task)}
             >
-              <Typography variant="h6">{task.title}</Typography>
-              <Typography>
-                Priority: {task.priority} | Status: {task.status}
-              </Typography>
+              <Box>
+                <Typography variant="h6">{task.title}</Typography>
+                <Typography sx={{ textTransform: "capitalize" }}>
+                  Priority: {task.priority} | Status: {task.status}
+                </Typography>
+              </Box>
+              <Box>
+                <Button
+                  onClick={() => handleTaskClick(task)}
+                  variant={"contained"}
+                  color={"info"}
+                  sx={{ marginRight: 1 }}
+                >
+                  Open
+                </Button>
+                <Button
+                  onClick={() => handleDeleteTask(task)}
+                  variant="contained"
+                  color="warning"
+                >
+                  Delete
+                </Button>
+              </Box>
             </Box>
           ))}
         </Grid>

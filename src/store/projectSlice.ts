@@ -1,6 +1,6 @@
 import type { Project } from "../types/general.types.ts";
 import { createSlice, type PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { generateSomeProjects } from "../mocks/api.ts";
+import { deleteTaskFromProjects, generateSomeProjects } from "../mocks/api.ts";
 import { Status } from "./types.ts";
 
 interface ProjectState {
@@ -23,6 +23,17 @@ export const generateProjects = createAsyncThunk(
   },
 );
 
+export const removeTaskFromProject = createAsyncThunk(
+  "projects/removeTaskFromProject",
+  async ({ projectId, taskId }: { projectId: string; taskId: string }) => {
+    if (!projectId) {
+      return;
+    }
+    const updatedProject = await deleteTaskFromProjects(projectId, taskId);
+    return updatedProject;
+  },
+);
+
 const projectSlice = createSlice({
   name: "projects",
   initialState,
@@ -34,16 +45,6 @@ const projectSlice = createSlice({
       state.projects = state.projects.filter(
         (project) => project.id !== action.payload,
       );
-    },
-    getProject: (state, action: PayloadAction<string>) => {
-      const project = state.projects.find(
-        (project) => project.id === action.payload,
-      );
-      if (!project) {
-        state.error = `Project with ID ${action.payload} not found!`;
-      } else {
-        state.error = null;
-      }
     },
   },
   extraReducers: (builder) => {
@@ -59,6 +60,27 @@ const projectSlice = createSlice({
       .addCase(generateProjects.rejected, (state, action) => {
         state.status = Status.Failed;
         state.error = action.error.message || "Failed to load projects";
+      });
+    builder
+      .addCase(removeTaskFromProject.pending, (state) => {
+        state.status = Status.Loading;
+        state.error = null;
+      })
+      .addCase(removeTaskFromProject.fulfilled, (state, action) => {
+        console.log("==============");
+        const updatedProject = action.payload;
+        if (!updatedProject) {
+          state.status = Status.Failed;
+          return;
+        }
+        state.projects = state.projects.map((project) =>
+          project.id === updatedProject.id ? updatedProject : project,
+        );
+        state.status = Status.Idle;
+      })
+      .addCase(removeTaskFromProject.rejected, (state, action) => {
+        state.status = Status.Failed;
+        state.error = action.error.message || "Failed to delete task";
       });
   },
 });
