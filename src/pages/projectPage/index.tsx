@@ -5,6 +5,7 @@ import type { RootState } from "../../store";
 import { useSelector } from "react-redux";
 import Typography from "@mui/material/Typography";
 import { Status } from "../../store/types.ts";
+import { TasksList } from "../../components/tasksList";
 
 export const ProjectPage: FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -36,14 +37,7 @@ export const ProjectPage: FC = () => {
       </Typography>
       <Typography>Tasks count: {projectToRender.tasks.length}</Typography>
       <Box mt={2}>
-        {projectToRender.tasks.map((task) => (
-          <Box key={task.id} border={1} borderColor="white" mb={1} p={2}>
-            <Typography variant="h6">{task.title}</Typography>
-            <Typography>
-              Priority: {task.priority} | Status: {task.status}
-            </Typography>
-          </Box>
-        ))}
+        <TasksList tasks={projectToRender.tasks} />
       </Box>
     </Box>
   );

@@ -20,7 +20,7 @@ const generateTasks = (count: number): Task[] => {
 
   return Array.from({ length: count }).map((_, index) => ({
     id: String(Date.now() + index),
-    type: Math.random() > 0.5 ? TaskType.USER_STORY : TaskType.BUG,
+    type: Math.random() > 0.5 ? TaskType.userStory : TaskType.bug,
     title: `Task ${index + 1}`,
     description: `Description for Task ${index + 1}`,
     priority: priorities[Math.floor(Math.random() * priorities.length)],

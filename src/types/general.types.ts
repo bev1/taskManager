@@ -1,21 +1,21 @@
 export enum TaskType {
-  USER_STORY = "user story",
-  BUG = "bug",
+  userStory = "user story",
+  bug = "bug",
 }
 
 export enum TaskPriority {
-  MINOR = "minor",
-  MEDIUM = "medium",
-  CRITICAL = "critical",
-  BLOCKER = "blocker",
+  minor = "minor",
+  medium = "medium",
+  critical = "critical",
+  blocker = "blocker",
 }
 
 export enum TaskStatus {
-  OPEN = "open",
-  IN_DEV = "in dev",
-  IN_TESTING = "in testing",
-  RE_OPEN = "re-open",
-  CLOSED = "closed",
+  open = "open",
+  inDev = "in dev",
+  inTesting = "in testing",
+  reOpen = "re-open",
+  closed = "closed",
 }
 
 export interface Task {
