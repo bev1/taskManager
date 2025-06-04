@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  Typography,
-  TextField,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
 import {
   type Task,
   TaskPriority,
   TaskStatus,
   TaskType,
 } from "../../types/general.types.ts";
+import { Dropdown } from "../formControls/dropdown";
 
 interface TaskPopupProps {
   task: Task | null;
@@ -84,56 +81,27 @@ const TaskPopup: React.FC<TaskPopupProps> = ({ task, isOpen, onClose }) => {
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <Typography variant="subtitle1">Type</Typography>
-            <Select
+            <Dropdown
               value={editedTask?.type || ""}
-              onChange={(e) => handleFieldChange("type", e.target.value)}
-              fullWidth
-              sx={{ backgroundColor: "white", textTransform: "capitalize" }}
-            >
-              {typesList.map((type) => {
-                return (
-                  <MenuItem sx={{ textTransform: "capitalize" }} value={type}>
-                    {type}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-
+              onChange={(newValue) => handleFieldChange("type", newValue)}
+              listItems={typesList}
+            />
             <Typography variant="subtitle1" mt={2}>
               Priority
             </Typography>
-            <Select
+            <Dropdown
               value={editedTask?.priority || ""}
-              onChange={(e) => handleFieldChange("priority", e.target.value)}
-              fullWidth
-              sx={{ backgroundColor: "white", textTransform: "capitalize" }}
-            >
-              {prioritiesList.map((priority) => {
-                return (
-                  <MenuItem sx={{ textTransform: "capitalize" }} value={priority}>
-                    {priority}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-
+              onChange={(newValue) => handleFieldChange("priority", newValue)}
+              listItems={prioritiesList}
+            />
             <Typography variant="subtitle1" mt={2}>
               Status
             </Typography>
-            <Select
+            <Dropdown
               value={editedTask?.status || ""}
-              onChange={(e) => handleFieldChange("status", e.target.value)}
-              fullWidth
-              sx={{ backgroundColor: "white", textTransform: "capitalize" }}
-            >
-              {statusesList.map((status) => {
-                return (
-                  <MenuItem sx={{ textTransform: "capitalize" }} value={status}>
-                    {status}
-                  </MenuItem>
-                );
-              })}
-            </Select>
+              onChange={(newValue) => handleFieldChange("status", newValue)}
+              listItems={statusesList}
+            />
           </Grid>
         </Grid>
       </DialogContent>

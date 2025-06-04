@@ -1,5 +1,6 @@
 import type { FC } from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
 import { useParams } from "react-router-dom";
 import type { RootState } from "../../store";
 import { useSelector } from "react-redux";
@@ -36,7 +37,8 @@ export const ProjectPage: FC = () => {
         Due Date: {new Date(projectToRender.dueDate).toLocaleDateString()}
       </Typography>
       <Typography>Tasks count: {projectToRender.tasks.length}</Typography>
-      <Box mt={2}>
+      <Divider color={"white"} />
+      <Box mt={4}>
         <TasksList tasks={projectToRender.tasks} />
       </Box>
     </Box>
