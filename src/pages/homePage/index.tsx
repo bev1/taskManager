@@ -1,23 +1,27 @@
-import { type FC, useEffect } from "react";
-import { Box } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchGeneratedProjects } from "../../store/projectSlice.ts";
-import type { AppDispatch, RootState } from "../../store";
+import { type FC } from "react";
+import { useSelector } from "react-redux";
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import type { RootState } from "../../store";
+import { ProjectTile } from "../../components/projectTile";
 
 export const HomePage: FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { projects, status, error } = useSelector(
-    (state: RootState) => state.projects,
-  );
-
-  useEffect(() => {
-    dispatch(fetchGeneratedProjects());
-  }, [dispatch]);
+  const { projects } = useSelector((state: RootState) => state.projects);
 
   console.log("projects", projects);
   return (
     <>
-      <Box>Home page</Box>
+      <Typography variant="h4" component={"h1"} gutterBottom>
+        Projects
+      </Typography>
+      <Grid container spacing={2}>
+        {projects &&
+          projects?.map((project) => (
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={project.id}>
+              <ProjectTile {...project} />
+            </Grid>
+          ))}
+      </Grid>
     </>
   );
 };

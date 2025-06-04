@@ -29,10 +29,13 @@ const generateTasks = (count: number): Task[] => {
   }));
 };
 
-export const generateProjects = (count: number): Project[] => {
+export const generateProjects = (
+  existingProjectsCount: number,
+  count: number,
+): Project[] => {
   return Array.from({ length: count }).map((_, i) => ({
     id: String(Date.now() + i),
-    name: `Project ${i + 1}`,
+    name: `Project ${i + existingProjectsCount}`,
     dueDate: generateRandomDate(90),
     tasks: generateTasks(Math.floor(Math.random() * 5)),
   }));

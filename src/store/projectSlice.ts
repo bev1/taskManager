@@ -1,21 +1,22 @@
 import type { Project } from "../types/general.types.ts";
 import { createSlice, type PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { generateSomeProjects } from "../mocks/api.ts";
+import { Status } from "./types.ts";
 
 interface ProjectState {
   projects: Project[];
-  status: "loading" | "failed" | "idle";
+  status: Status;
   error: string | null;
 }
 
 const initialState: ProjectState = {
   projects: [],
-  status: "idle",
+  status: Status.Idle,
   error: null,
 };
 
-export const fetchGeneratedProjects = createAsyncThunk(
-  "projects/fetchGeneratedProjects",
+export const generateProjects = createAsyncThunk(
+  "projects/generateProjects",
   async () => {
     const response = await generateSomeProjects();
     return response;
@@ -34,19 +35,29 @@ const projectSlice = createSlice({
         (project) => project.id !== action.payload,
       );
     },
+    getProject: (state, action: PayloadAction<string>) => {
+      const project = state.projects.find(
+        (project) => project.id === action.payload,
+      );
+      if (!project) {
+        state.error = `Project with ID ${action.payload} not found!`;
+      } else {
+        state.error = null;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchGeneratedProjects.pending, (state) => {
-        state.status = "loading";
+      .addCase(generateProjects.pending, (state) => {
+        state.status = Status.Loading;
         state.error = null;
       })
-      .addCase(fetchGeneratedProjects.fulfilled, (state, action) => {
-        state.status = "idle";
-        state.projects = [...state.projects, ...action.payload];
+      .addCase(generateProjects.fulfilled, (state, action) => {
+        state.status = Status.Idle;
+        state.projects = action.payload;
       })
-      .addCase(fetchGeneratedProjects.rejected, (state, action) => {
-        state.status = "failed";
+      .addCase(generateProjects.rejected, (state, action) => {
+        state.status = Status.Failed;
         state.error = action.error.message || "Failed to load projects";
       });
   },
