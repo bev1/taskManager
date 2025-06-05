@@ -4,14 +4,13 @@ import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 
 import { TasksList } from "../../components/tasksList";
 import type { RootState } from "../../store";
 
 export const ProjectPage: FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
-  console.log("projectId", projectId);
   const { projects, error } = useSelector((state: RootState) => ({
     projects: state.projects.projects,
     error: state.projects.error,
@@ -20,11 +19,7 @@ export const ProjectPage: FC = () => {
   const projectToRender = projects.find((p) => p.id === projectId);
 
   if (!projectToRender || error) {
-    return (
-      <Box>
-        <Typography color="error">Error: {error || "Project not found!"}</Typography>
-      </Box>
-    );
+    return <Navigate to="/404" replace />;
   }
 
   return (

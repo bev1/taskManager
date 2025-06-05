@@ -3,7 +3,7 @@ import { createSlice, type PayloadAction, createAsyncThunk } from "@reduxjs/tool
 import {
   deleteTaskFromProjects,
   generateSomeProjects,
-  updateTaskInProject,
+  updateOrAddTaskInProject,
 } from "../mocks/api.ts";
 import type { Project, Task } from "../types/general.types.ts";
 
@@ -46,10 +46,10 @@ export const removeTaskFromProject = createAsyncThunk(
   },
 );
 
-export const updateTask = createAsyncThunk(
-  "projects/updateTask",
+export const updateOrCreateTask = createAsyncThunk(
+  "projects/updateOrCreateTask",
   async ({ projectId, updatedTask }: { projectId: string; updatedTask: Task }) => {
-    const updatedProject = await updateTaskInProject(projectId, updatedTask);
+    const updatedProject = await updateOrAddTaskInProject(projectId, updatedTask);
     return updatedProject;
   },
 );
@@ -102,11 +102,11 @@ const projectSlice = createSlice({
         state.error = action.error.message || "Failed to delete task";
       });
     builder
-      .addCase(updateTask.pending, (state) => {
+      .addCase(updateOrCreateTask.pending, (state) => {
         state.status = Status.Loading;
         state.error = null;
       })
-      .addCase(updateTask.fulfilled, (state, action) => {
+      .addCase(updateOrCreateTask.fulfilled, (state, action) => {
         const updatedProject = action.payload;
 
         state.projects = state.projects.map((project) =>
@@ -114,13 +114,11 @@ const projectSlice = createSlice({
         );
         state.status = Status.Idle;
       })
-      .addCase(updateTask.rejected, (state, action) => {
+      .addCase(updateOrCreateTask.rejected, (state, action) => {
         state.status = Status.Failed;
         state.error = action.error.message || "Failed to update task in project.";
       });
   },
 });
-
-export const { addProject, removeProject } = projectSlice.actions;
 
 export default projectSlice.reducer;

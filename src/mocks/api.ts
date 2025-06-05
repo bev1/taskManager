@@ -35,7 +35,7 @@ export const deleteTaskFromProjects = (
   return Promise.reject(new Error(`Project ${projectId} not found.`));
 };
 
-export const updateTaskInProject = (
+export const updateOrAddTaskInProject = (
   projectId: string,
   updatedTask: Task,
 ): Promise<Project> => {
@@ -45,11 +45,20 @@ export const updateTaskInProject = (
     return Promise.reject(new Error(`Project ${projectId} not found.`));
   }
 
+  const isNewTask = !updatedTask.id;
+
+  const taskToAddOrUpdate: Task = {
+    ...updatedTask,
+    id: updatedTask.id || String(Date.now()),
+  };
+
   const updatedProject = {
     ...project,
-    tasks: project.tasks.map((task) =>
-      task.id === updatedTask.id ? { ...task, ...updatedTask } : task,
-    ),
+    tasks: isNewTask
+      ? [...project.tasks, taskToAddOrUpdate]
+      : project.tasks.map((task) =>
+          task.id === updatedTask.id ? { ...task, ...updatedTask } : task,
+        ),
   };
 
   projects = projects.map((proj) => (proj.id === projectId ? updatedProject : proj));

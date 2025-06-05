@@ -15,10 +15,7 @@ import { CheckboxControl } from "../formControls/checkbox";
 import { Dropdown } from "../formControls/dropdown";
 import TaskPopup from "../taskPopup";
 
-
 import { getFilteredAndSortedTasks } from "./helpers.ts";
-
-
 
 export const TasksList: FC<{ tasks: Task[] }> = ({ tasks }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -55,6 +52,19 @@ export const TasksList: FC<{ tasks: Task[] }> = ({ tasks }) => {
 
   const handleDeleteTask = (task: Task) => {
     dispatch(removeTaskFromProject({ projectId, taskId: task.id }));
+  };
+
+  const handleCreateTaskClick = () => {
+    setSelectedTask({
+      id: "",
+      title: "",
+      description: "",
+      type: "user story",
+      priority: "minor",
+      status: "open",
+    } as Task);
+    // setCreateMode(true);
+    setIsPopupOpen(true);
   };
 
   const filteredAndSortedTasks = getFilteredAndSortedTasks(tasks, {
@@ -104,6 +114,15 @@ export const TasksList: FC<{ tasks: Task[] }> = ({ tasks }) => {
             onChange={(value) => setSortBy(value as "priority" | "status")}
             listItems={["", "priority", "status"]}
           />
+          <Button
+            onClick={handleCreateTaskClick}
+            variant="contained"
+            color="success"
+            fullWidth
+            sx={{ marginTop: 2 }}
+          >
+            Create Task
+          </Button>
         </Grid>
         <Grid size={{ sm: 12, md: 8 }}>
           {filteredAndSortedTasks.map((task) => (

@@ -8,8 +8,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
+import type { AppDispatch } from "../../store";
+import { updateOrCreateTask } from "../../store/projectSlice.ts";
 import {
   type Task,
   TaskPriority,
@@ -17,9 +20,6 @@ import {
   TaskType,
 } from "../../types/general.types.ts";
 import { Dropdown } from "../formControls/dropdown";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "../../store";
-import { updateTask } from "../../store/projectSlice.ts";
 
 interface TaskPopupProps {
   task: Task | null;
@@ -31,20 +31,39 @@ const TaskPopup: React.FC<TaskPopupProps> = ({ task, isOpen, onClose }) => {
   const { projectId } = useParams<{ projectId: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const [editedTask, setEditedTask] = useState<Task | null>(task);
+  const [titleError, setTitleError] = useState(false);
+  const [descriptionError, setDescriptionError] = useState(false);
 
   const handleFieldChange = (field: keyof Task, value: string) => {
     if (editedTask) {
       setEditedTask({ ...editedTask, [field]: value });
     }
+    if (field === "title" && value.trim()) {
+      setTitleError(false);
+    }
+    if (field === "description" && value.trim()) {
+      setDescriptionError(false);
+    }
   };
 
   useEffect(() => {
     setEditedTask(task);
+    setTitleError(false);
+    setDescriptionError(false);
   }, [task]);
 
   const handleSaveTaskClick = () => {
+    const isTitleEmpty = !editedTask?.title?.trim();
+    const isDescriptionEmpty = !editedTask?.description?.trim();
+
+    setTitleError(isTitleEmpty);
+    setDescriptionError(isDescriptionEmpty);
+
+    if (isTitleEmpty || isDescriptionEmpty) return;
+
     if (projectId && editedTask) {
-      dispatch(updateTask({ projectId, updatedTask: editedTask }));
+      dispatch(updateOrCreateTask({ projectId, updatedTask: editedTask }));
+      onClose();
     }
   };
 
@@ -63,6 +82,7 @@ const TaskPopup: React.FC<TaskPopupProps> = ({ task, isOpen, onClose }) => {
           background: "#242424",
           border: "1px solid white",
           color: "white",
+          overflow: "hidden",
         },
       }}
     >
@@ -75,7 +95,18 @@ const TaskPopup: React.FC<TaskPopupProps> = ({ task, isOpen, onClose }) => {
               value={editedTask?.title || ""}
               onChange={(e) => handleFieldChange("title", e.target.value)}
               fullWidth
+              error={titleError}
+              helperText={titleError ? "Title cannot be empty" : ""}
               sx={{ backgroundColor: "white" }}
+              slotProps={{
+                formHelperText: {
+                  sx: {
+                    backgroundColor: "#242424",
+                    fontSize: "16px",
+                    margin: 0,
+                  },
+                },
+              }}
             />
             <Typography variant="subtitle1" mt={2}>
               Description
@@ -86,7 +117,18 @@ const TaskPopup: React.FC<TaskPopupProps> = ({ task, isOpen, onClose }) => {
               fullWidth
               multiline
               rows={4}
+              error={descriptionError}
+              helperText={descriptionError ? "Description cannot be empty" : ""}
               sx={{ backgroundColor: "white" }}
+              slotProps={{
+                formHelperText: {
+                  sx: {
+                    backgroundColor: "#242424",
+                    fontSize: "16px",
+                    margin: 0,
+                  },
+                },
+              }}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
