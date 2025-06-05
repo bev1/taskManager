@@ -4,7 +4,7 @@ import {
   TaskPriority,
   TaskStatus,
   TaskType,
-} from "../types/general.types.ts";
+} from "../types/general.types";
 
 const generateRandomDate = (daysAhead: number): string => {
   const today = new Date();

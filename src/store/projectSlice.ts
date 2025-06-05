@@ -4,10 +4,10 @@ import {
   deleteTaskFromProjects,
   generateSomeProjects,
   updateOrAddTaskInProject,
-} from "../mocks/api.ts";
+} from "../mocks/api";
 import type { Project, Task } from "../types/general.types.ts";
 
-import { Status } from "./types.ts";
+import { Status } from "./types";
 
 interface ProjectState {
   projects: Project[];

@@ -1,6 +1,6 @@
 import type { Project, Task } from "../types/general.types.ts";
 
-import { generateProjects } from "./helpers.ts";
+import { generateProjects } from "./helpers";
 
 let projects: Project[] = [];
 

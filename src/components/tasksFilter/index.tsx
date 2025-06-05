@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import { TaskPriority, TaskStatus } from "../../types/general.types.ts";
+import { TaskPriority, TaskStatus } from "../../types/general.types";
 import { CheckboxControl } from "../formControls/checkbox";
 import { Dropdown } from "../formControls/dropdown";
 import type { FiltersProps } from "./types.ts";

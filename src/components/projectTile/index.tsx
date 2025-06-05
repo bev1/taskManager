@@ -23,6 +23,7 @@ export const ProjectTile: FC<Project> = (project) => {
           color="primary"
           size="small"
           style={{ marginTop: 10 }}
+          role="button"
         >
           View Details
         </Button>

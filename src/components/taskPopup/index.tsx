@@ -16,22 +16,17 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 
 import type { AppDispatch } from "../../store";
-import { updateOrCreateTask } from "../../store/projectSlice.ts";
+import { updateOrCreateTask } from "../../store/projectSlice";
 import {
   type Task,
   TaskPriority,
   TaskStatus,
   TaskType,
-} from "../../types/general.types.ts";
+} from "../../types/general.types";
 import { Dropdown } from "../formControls/dropdown";
+import { type TaskPopupProps } from "./types";
 
-interface TaskPopupProps {
-  task: Task | null;
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const TaskPopup: React.FC<TaskPopupProps> = ({ task, isOpen, onClose }) => {
+export const TaskPopup: React.FC<TaskPopupProps> = ({ task, isOpen, onClose }) => {
   const { projectId } = useParams<{ projectId: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const [editedTask, setEditedTask] = useState<Task | null>(task);
@@ -96,6 +91,7 @@ const TaskPopup: React.FC<TaskPopupProps> = ({ task, isOpen, onClose }) => {
           <Grid size={{ xs: 12, md: 8 }}>
             <Typography variant="subtitle1">Title</Typography>
             <TextField
+              label="title"
               value={editedTask?.title || ""}
               onChange={(e) => handleFieldChange("title", e.target.value)}
               fullWidth
@@ -167,6 +163,7 @@ const TaskPopup: React.FC<TaskPopupProps> = ({ task, isOpen, onClose }) => {
               value={editedTask?.priority || ""}
               onChange={(newValue) => handleFieldChange("priority", newValue)}
               listItems={prioritiesList}
+              data-testid={"priority"}
             />
             <Typography variant="subtitle1" mt={2}>
               Status
@@ -190,5 +187,3 @@ const TaskPopup: React.FC<TaskPopupProps> = ({ task, isOpen, onClose }) => {
     </Dialog>
   );
 };
-
-export default TaskPopup;
