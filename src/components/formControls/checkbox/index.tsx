@@ -1,6 +1,8 @@
 import { type FC } from "react";
-import FormControlLabel from "@mui/material/FormControlLabel";
+
 import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+
 import type { CheckboxProps } from "./types.ts";
 
 export const CheckboxControl: FC<CheckboxProps> = ({

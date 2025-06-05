@@ -1,26 +1,23 @@
 import type { FC } from "react";
+
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
-import { useParams } from "react-router-dom";
-import type { RootState } from "../../store";
-import { useSelector } from "react-redux";
 import Typography from "@mui/material/Typography";
-import { Status } from "../../store/types.ts";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+
 import { TasksList } from "../../components/tasksList";
+import type { RootState } from "../../store";
 
 export const ProjectPage: FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
   console.log("projectId", projectId);
-  const { projects, error, status } = useSelector((state: RootState) => ({
+  const { projects, error } = useSelector((state: RootState) => ({
     projects: state.projects.projects,
     error: state.projects.error,
     status: state.projects.status,
   }));
   const projectToRender = projects.find((p) => p.id === projectId);
-
-  if (status === Status.Loading) {
-    return <Typography>Loading...</Typography>;
-  }
 
   if (!projectToRender || error) {
     return (

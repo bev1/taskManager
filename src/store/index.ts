@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+
 import projectReducer from "./projectSlice"; // Наш slice для проектов
 
 const store = configureStore({

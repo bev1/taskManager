@@ -1,9 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { HomePage } from "./pages/homePage";
-import { ProjectPage } from "./pages/projectPage";
-import { NotFound } from "./pages/notFound";
+
 import { Layout } from "./components/layout";
 import { routes } from "./constants/routes.ts";
+import { HomePage } from "./pages/homePage";
+import { NotFound } from "./pages/notFound";
+import { ProjectPage } from "./pages/projectPage";
 
 function App() {
   return (

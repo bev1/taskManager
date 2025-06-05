@@ -37,6 +37,6 @@ export const generateProjects = (
     id: String(Date.now() + i),
     name: `Project ${i + existingProjectsCount}`,
     dueDate: generateRandomDate(90),
-    tasks: generateTasks(Math.floor(Math.random() * 5)),
+    tasks: generateTasks(Math.floor(Math.random() * 10)),
   }));
 };

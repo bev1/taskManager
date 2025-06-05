@@ -1,14 +1,15 @@
 import { type FC } from "react";
-import { useSelector } from "react-redux";
-import Typography from "@mui/material/Typography";
+
 import Grid from "@mui/material/Grid";
-import type { RootState } from "../../store";
+import Typography from "@mui/material/Typography";
+import { useSelector } from "react-redux";
+
 import { ProjectTile } from "../../components/projectTile";
+import type { RootState } from "../../store";
 
 export const HomePage: FC = () => {
   const { projects } = useSelector((state: RootState) => state.projects);
 
-  console.log("projects", projects);
   return (
     <>
       <Typography variant="h4" component={"h1"} gutterBottom>

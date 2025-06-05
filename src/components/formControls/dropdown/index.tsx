@@ -1,6 +1,8 @@
 import { type FC } from "react";
-import Select from "@mui/material/Select";
+
 import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+
 import type { DropdownProps } from "./types.ts";
 
 export const Dropdown: FC<DropdownProps> = ({ value, onChange, listItems }) => {

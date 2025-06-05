@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
+
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { useParams } from "react-router-dom";
+
 import {
   type Task,
   TaskPriority,
@@ -14,6 +17,9 @@ import {
   TaskType,
 } from "../../types/general.types.ts";
 import { Dropdown } from "../formControls/dropdown";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../../store";
+import { updateTask } from "../../store/projectSlice.ts";
 
 interface TaskPopupProps {
   task: Task | null;
@@ -22,6 +28,8 @@ interface TaskPopupProps {
 }
 
 const TaskPopup: React.FC<TaskPopupProps> = ({ task, isOpen, onClose }) => {
+  const { projectId } = useParams<{ projectId: string }>();
+  const dispatch = useDispatch<AppDispatch>();
   const [editedTask, setEditedTask] = useState<Task | null>(task);
 
   const handleFieldChange = (field: keyof Task, value: string) => {
@@ -35,7 +43,9 @@ const TaskPopup: React.FC<TaskPopupProps> = ({ task, isOpen, onClose }) => {
   }, [task]);
 
   const handleSaveTaskClick = () => {
-    console.log("SAVE");
+    if (projectId && editedTask) {
+      dispatch(updateTask({ projectId, updatedTask: editedTask }));
+    }
   };
 
   const prioritiesList = Object.values(TaskPriority);

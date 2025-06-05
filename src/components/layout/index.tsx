@@ -1,21 +1,37 @@
-import { type FC, useCallback } from "react";
-import { Box, AppBar, Toolbar, Typography, Container, Button } from "@mui/material";
+import { type FC } from "react";
+
+import AddTaskIcon from "@mui/icons-material/AddTask";
+import {
+  Box,
+  AppBar,
+  Toolbar,
+  Typography,
+  Container,
+  Button,
+  Backdrop,
+  CircularProgress,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Outlet } from "react-router-dom";
+
 import { routes } from "../../constants/routes.ts";
-import AddTaskIcon from "@mui/icons-material/AddTask";
-import { useTheme } from "@mui/material/styles";
+import type { AppDispatch, RootState } from "../../store";
 import { generateProjects } from "../../store/projectSlice.ts";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "../../store";
+import { Status } from "../../store/types.ts";
 
 export const Layout: FC = () => {
   const theme = useTheme();
   const dispatch = useDispatch<AppDispatch>();
+  const { status } = useSelector((state: RootState) => state.projects);
 
-  const handleProjectsGenerationClick = useCallback(() => {
+  const handleProjectsGenerationClick = () => {
     dispatch(generateProjects());
-  }, []);
+  };
+
+  if (status === Status.Loading) {
+  }
 
   return (
     <Box>
@@ -53,6 +69,15 @@ export const Layout: FC = () => {
       <Container sx={{ marginTop: theme.spacing(2) }}>
         <Outlet />
       </Container>
+      <Backdrop
+        open={status === Status.Loading}
+        sx={{
+          color: "#fff",
+          zIndex: 9999,
+        }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Box>
   );
 };
