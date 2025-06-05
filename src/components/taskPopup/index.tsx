@@ -10,6 +10,10 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 import type { AppDispatch } from "../../store";
 import { updateOrCreateTask } from "../../store/projectSlice.ts";
@@ -130,6 +134,24 @@ const TaskPopup: React.FC<TaskPopupProps> = ({ task, isOpen, onClose }) => {
                 },
               }}
             />
+            <Typography variant="subtitle1" mt={2}>
+              Due Date
+            </Typography>
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                value={editedTask?.dueDate ? dayjs(editedTask.dueDate) : null}
+                onChange={(newValue: Dayjs | null) =>
+                  handleFieldChange(
+                    "dueDate",
+                    newValue ? newValue.format("YYYY-MM-DD") : "",
+                  )
+                }
+                sx={{
+                  backgroundColor: "white",
+                }}
+              />
+            </LocalizationProvider>
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <Typography variant="subtitle1">Type</Typography>
