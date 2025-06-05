@@ -91,7 +91,6 @@ export const TaskPopup: React.FC<TaskPopupProps> = ({ task, isOpen, onClose }) =
           <Grid size={{ xs: 12, md: 8 }}>
             <Typography variant="subtitle1">Title</Typography>
             <TextField
-              label="title"
               value={editedTask?.title || ""}
               onChange={(e) => handleFieldChange("title", e.target.value)}
               fullWidth
@@ -105,6 +104,9 @@ export const TaskPopup: React.FC<TaskPopupProps> = ({ task, isOpen, onClose }) =
                     fontSize: "16px",
                     margin: 0,
                   },
+                },
+                htmlInput: {
+                  "data-testid": "title",
                 },
               }}
             />

@@ -46,7 +46,7 @@ describe("TaskPopup", () => {
       <TaskPopup task={mockTask} isOpen={true} onClose={mockOnClose} />,
     );
 
-    const titleInput = screen.getByLabelText("title");
+    const titleInput = screen.getByTestId("title");
     fireEvent.change(titleInput, { target: { value: "Updated Title" } });
 
     expect(titleInput).toHaveValue("Updated Title");

@@ -12,7 +12,7 @@ import {
   TaskStatus,
   TaskType,
 } from "../../types/general.types.ts";
-import TaskPopup from "../taskPopup";
+import { TaskPopup } from "../taskPopup";
 import { Task as TaskComponent } from "../task";
 
 import { getFilteredAndSortedTasks } from "./helpers.ts";
